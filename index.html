@@ -12,7 +12,7 @@
     mapboxgl.accessToken = 'pk.eyJ1IjoiZHpjcCIsImEiOiJjazd3cDIwazYwNHd4M2RxdTQ1aWxwamF1In0.433QxPSQ-xAWDWFvD9b7lQ';
     var map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/dzcp/ck7xlt4gv00ac1iq9e6ipj16q',
+        style: 'mapbox://styles/dzcp/ck7xniymu1kvk1iqdiui4c151',
         center: [-79.38, 43.65],
         zoom:5,
         attributionControl: false
@@ -40,8 +40,15 @@
                 "hsl(301, 100%, 49%)",
                 "hsl(206, 100%, 49%)"
                 ],
-                'fill-opacity': 0.5,
-                'fill-outline-color': '#ffffff'
+                'fill-opacity': 0.25,
+                'fill-outline-color': ['match',
+                ['get', 'ENG_LABEL'],
+                ["City of Toronto Health Unit",
+                "North Bay Parry Sound District Health Unit",
+                "Kingston, Frontenac and Lennox and Addington Health Unit"], 
+                "#ff0000",
+                "#ffffff"
+                ]
                 }
         });
     });
