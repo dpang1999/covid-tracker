@@ -31,9 +31,17 @@
             'source-layer': 'HRP035b11a_e-dz3vx5',
             'type': 'fill',
             'paint':{
-                'fill-color': '#ff0000',
+                'fill-color': [
+                'match',
+                ['get', 'ENG_LABEL'],
+                ["City of Toronto Health Unit",
+                "North Bay Parry Sound District Health Unit",
+                "Kingston, Frontenac and Lennox and Addington Health Unit"], 
+                "hsl(301, 100%, 49%)",
+                "hsl(206, 100%, 49%)"
+                ],
                 'fill-opacity': 0.5,
-                'fill-outline-color': '#000000'
+                'fill-outline-color': '#ffffff'
                 }
         });
     });
