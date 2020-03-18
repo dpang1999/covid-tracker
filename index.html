@@ -4,10 +4,16 @@
 <head>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <style>
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+    </style>    
 </head>
 
 <body>
-<div id='map' style='width: 400px; height: 300px;'></div>
+
+<div id='map'></div>
+
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiZHpjcCIsImEiOiJjazd3cDIwazYwNHd4M2RxdTQ1aWxwamF1In0.433QxPSQ-xAWDWFvD9b7lQ';
     var map = new mapboxgl.Map({
