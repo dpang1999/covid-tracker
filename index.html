@@ -58,6 +58,19 @@
                 }
         });
     });
+
+    map.on('click', 'border', function(mouse) {
+    	new mapboxgl.Popup()
+    		.setLngLat(mouse.lngLat)
+    		.setHTML(
+    			"<p>&nbsp;</p>" +
+				"<h2 style=\"text-align: center;\"><strong>&nbsp;</strong><strong>Health Unit<br/>Circonscription Sanitaire</span></span></strong></h2>" +
+				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">" + mouse.features[0].properties.ENG_LABEL + "</span></span></strong></p>" +
+				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">" + mouse.features[0].properties.FRE_LABEL + "</span></span></strong></p>" +
+				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">Phone/T&eacute;l&eacute;phone:</span></span></strong></p>"
+    			)
+    		.addTo(map);
+    });
         
 </script>
 </body>
