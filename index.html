@@ -98,8 +98,11 @@
     			)
     		.addTo(map);
     });
-    
-    var numOfDates=70;
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var initialDate = new Date(2020, 0, 24);
+    var date = new Date(2020, 0, 24);
+    var currentDate = new Date();
+    var numOfDates=Math.floor((currentDate.getTime()-initialDate.getTime())/86400000);
     var sliderInput = document.createElement("input");
     sliderInput.setAttribute("type", "range");
     sliderInput.setAttribute("min", "0");
@@ -110,9 +113,7 @@
     
     document.getElementById('slider').appendChild(sliderInput);
     
-    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
-    var initialDate = new Date(2020, 0, 24);
-    var date = new Date(2020, 0, 24);
+    
     updateDateLabel();
     
     function updateDateLabel(){
