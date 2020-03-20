@@ -4,95 +4,8 @@
 <head>
     <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
-    <meta name="viewport" content="width=device-width,initial-scale=1">
-    <style>
-        #map { 
-        position: absolute; 
-        top: 0; 
-        bottom: 0; 
-        left: -0.5%;
-        width: 100.5%; 
-        z-index:-1;
-        }
-        .map-overlay {
-        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        position: fixed;
-        width: 25%;
-        left: 5px;
-        bottom: 10px;
-        padding: 10px;
-        }
-        .map-overlay .map-overlay-inner {
-        background-color: #fff;
-        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
-        border-radius: 3px;
-        padding: 10px;
-        margin-bottom: 10px;
-        }
-        .map-overlay .legend .bar {
-        height: 10px;
-        width: 100%;
-        background: linear-gradient(to right, #f6bdc0, #dc1c13);
-        <!--colours taken from: https://www.schemecolor.com/red-gradient.php-->
-        }
-        .map-overlay input {
-        background-color: transparent;
-        display: inline-block;
-        width: 100%;
-        position: relative;
-        margin: 0;
-        cursor: ew-resize;
-        }
-        #legend {
-            text-align:left;
-        }
-        
-        .sidenav {
-        height: 100%;
-        width: 0;
-        position: fixed;
-        z-index: 1;
-        top: 0;
-        right: 0;
-        background-color: #111;
-        overflow-x: hidden;
-        transition: 0.5s;
-        padding-top: 60px;
-        }
-        .sidenav a {
-        padding: 8px 8px 8px 32px;
-        text-decoration: none;
-        font-size: 25px;
-        color: #818181;
-        display: block;
-        transition: 0.3s;
-        }
-        .sidenav #image{
-            padding: 0px 0px 0px 0px;
-        }
-
-        .sidenav a:hover {
-        color: #f1f1f1;
-        }
-
-        .sidenav .closebtn {
-        position: absolute;
-        top: 0;
-        right: 25px;
-        font-size: 36px;
-        margin-left: 50px;
-        }
-
-        @media screen and (max-height: 450px) {
-        .sidenav {padding-top: 15px;}
-        .sidenav a {font-size: 18px;}
-        }
-        #mySidenav p{
-        color: #ffffff;
-        padding: 5px;
-        
-        }
-    </style>    
+    <link href="style.css" rel="stylesheet" >
+    <meta name="viewport" content="width=device-width,initial-scale=1">   
 </head>
 
 <body>
@@ -106,7 +19,13 @@
     <div class="map-overlay-inner">
         <div id="legend" class="legend">
             <div class="bar"></div>
-            <div>Total Number of COVID-19 Cases to Date</div>
+            <p style="text-align:left;">
+                0
+                <span style="float:right;">
+                    10
+                </span>
+            </p>
+            <div style="text-align: center">Total Number of COVID-19 Cases to Date</div>
         </div>
     </div>
 </div>
@@ -115,8 +34,9 @@
 <div id="mySidenav" class="sidenav">
   <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
   <a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019" target="_blank" id="image"> <img src="https://pbs.twimg.com/media/EPjfjiuW4AAvqeh.jpg:large" alt="WHO Coronavirus Inforgraphic" style="max-width:100%;"></img></a>
-  <a href="https://www.ontario.ca/page/2019-novel-coronavirus" target="_blank">Ontario Information</a>
-  <a href="#">Services</a>
+  <a href="https://www.ontario.ca/page/2019-novel-coronavirus" target="_blank">Ontario Information on Coronavirus</a>
+  <a href="https://www.ontario.ca/page/community-health-centres">Ontario Community Health Centres</a>
+  <a href="https://covid-19.ontario.ca/self-assessment/#q0"> Self-Assessment</a>
   <a href="#">Give Money, like buy us a coffee or smthn idk</a>
 </div>
 
