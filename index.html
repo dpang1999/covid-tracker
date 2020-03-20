@@ -6,16 +6,23 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <style>
-        #map { position: absolute; top: 0; bottom: 0; width: 100%; z-index:-1;}
+        #map { 
+        position: absolute; 
+        top: 0; 
+        bottom: 0; 
+        left: -0.5%;
+        width: 100.5%; 
+        z-index:-1;
+        }
         .map-overlay {
         font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
-        position: absolute;
+        position: fixed;
         width: 25%;
-        top: 0;
-        left: 0;
+        left: 5px;
+        bottom: 10px;
         padding: 10px;
         }
-         .map-overlay .map-overlay-inner {
+        .map-overlay .map-overlay-inner {
         background-color: #fff;
         box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
         border-radius: 3px;
@@ -39,6 +46,52 @@
         #legend {
             text-align:left;
         }
+        
+        .sidenav {
+        height: 100%;
+        width: 0;
+        position: fixed;
+        z-index: 1;
+        top: 0;
+        right: 0;
+        background-color: #111;
+        overflow-x: hidden;
+        transition: 0.5s;
+        padding-top: 60px;
+        }
+        .sidenav a {
+        padding: 8px 8px 8px 32px;
+        text-decoration: none;
+        font-size: 25px;
+        color: #818181;
+        display: block;
+        transition: 0.3s;
+        }
+        .sidenav #image{
+            padding: 0px 0px 0px 0px;
+        }
+
+        .sidenav a:hover {
+        color: #f1f1f1;
+        }
+
+        .sidenav .closebtn {
+        position: absolute;
+        top: 0;
+        right: 25px;
+        font-size: 36px;
+        margin-left: 50px;
+        }
+
+        @media screen and (max-height: 450px) {
+        .sidenav {padding-top: 15px;}
+        .sidenav a {font-size: 18px;}
+        }
+        #mySidenav p{
+        color: #ffffff;
+        padding: 5px;
+        
+        }
     </style>    
 </head>
 
@@ -57,6 +110,16 @@
         </div>
     </div>
 </div>
+
+<span style="font-size:30px;cursor:pointer;position:fixed;right:10px;padding:5px;color:white;text-shadow: 2px 2px #000000" onclick="openNav()">&#9776;</span>
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019" target="_blank" id="image"> <img src="https://pbs.twimg.com/media/EPjfjiuW4AAvqeh.jpg:large" alt="WHO Coronavirus Inforgraphic" style="max-width:100%;"></img></a>
+  <a href="https://www.ontario.ca/page/2019-novel-coronavirus" target="_blank">Ontario Information</a>
+  <a href="#">Services</a>
+  <a href="#">Give Money, like buy us a coffee or smthn idk</a>
+</div>
+
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiZHpjcCIsImEiOiJjazd3cDIwazYwNHd4M2RxdTQ1aWxwamF1In0.433QxPSQ-xAWDWFvD9b7lQ';
     var map = new mapboxgl.Map({
@@ -116,7 +179,6 @@
     		.addTo(map);
     });
     
-    //<input id="slider" type="range" min="0" max="50" step="1" value="0" />
     var numOfDates=70;
     var sliderInput = document.createElement("input");
     sliderInput.setAttribute("type", "range");
@@ -146,6 +208,14 @@
         //filterBy(date);
     });
         
+        
+    function openNav() {
+        document.getElementById("mySidenav").style.width = "25%";
+    }
+
+    function closeNav() {
+        document.getElementById("mySidenav").style.width = "0";
+    }
 </script>
 </body>
 
