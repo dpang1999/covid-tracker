@@ -6,7 +6,39 @@
     <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
     <meta name="viewport" content="width=device-width,initial-scale=1">
     <style>
-        #map { position: absolute; top: 0; bottom: 0; width: 100%; }
+        #map { position: absolute; top: 0; bottom: 0; width: 100%; z-index:-1;}
+        .map-overlay {
+        font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+        position: absolute;
+        width: 25%;
+        top: 0;
+        left: 0;
+        padding: 10px;
+        }
+         .map-overlay .map-overlay-inner {
+        background-color: #fff;
+        box-shadow: 0 1px 2px rgba(0, 0, 0, 0.2);
+        border-radius: 3px;
+        padding: 10px;
+        margin-bottom: 10px;
+        }
+        .map-overlay .legend .bar {
+        height: 10px;
+        width: 100%;
+        background: linear-gradient(to right, #f6bdc0, #dc1c13);
+        <!--colours taken from: https://www.schemecolor.com/red-gradient.php-->
+        }
+        .map-overlay input {
+        background-color: transparent;
+        display: inline-block;
+        width: 100%;
+        position: relative;
+        margin: 0;
+        cursor: ew-resize;
+        }
+        #legend {
+            text-align:left;
+        }
     </style>    
 </head>
 
@@ -14,6 +46,17 @@
 
 <div id='map'></div>
 
+<div class="map-overlay top">
+    <div class="map-overlay-inner">
+        <label id="slider"><h2 id="date"></h2></label>
+    </div>
+    <div class="map-overlay-inner">
+        <div id="legend" class="legend">
+            <div class="bar"></div>
+            <div>Total Number of COVID-19 Cases to Date</div>
+        </div>
+    </div>
+</div>
 <script>
     mapboxgl.accessToken = 'pk.eyJ1IjoiZHpjcCIsImEiOiJjazd3cDIwazYwNHd4M2RxdTQ1aWxwamF1In0.433QxPSQ-xAWDWFvD9b7lQ';
     var map = new mapboxgl.Map({
@@ -60,16 +103,47 @@
     });
 
     map.on('click', 'border', function(mouse) {
+        var eng_name = mouse.features[0].properties.ENG_LABEL;
     	new mapboxgl.Popup()
     		.setLngLat(mouse.lngLat)
     		.setHTML(
     			"<p>&nbsp;</p>" +
 				"<h2 style=\"text-align: center;\"><strong>&nbsp;</strong><strong>Health Unit<br/>Circonscription Sanitaire</span></span></strong></h2>" +
-				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">" + mouse.features[0].properties.ENG_LABEL + "</span></span></strong></p>" +
+				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">" + eng_name + "</span></span></strong></p>" +
 				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">" + mouse.features[0].properties.FRE_LABEL + "</span></span></strong></p>" +
 				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">Phone/T&eacute;l&eacute;phone:</span></span></strong></p>"
     			)
     		.addTo(map);
+    });
+    
+    //<input id="slider" type="range" min="0" max="50" step="1" value="0" />
+    var numOfDates=70;
+    var sliderInput = document.createElement("input");
+    sliderInput.setAttribute("type", "range");
+    sliderInput.setAttribute("min", "0");
+    sliderInput.setAttribute("max", ""+numOfDates);
+    sliderInput.setAttribute("step", "1");
+    sliderInput.setAttribute("value", "0");
+    
+    
+    document.getElementById('slider').appendChild(sliderInput);
+    
+    var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
+    var initialDate = new Date(2020, 0, 24);
+    var date = new Date(2020, 0, 24);
+    updateDateLabel();
+    
+    function updateDateLabel(){
+        var formattedDate = months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
+        document.getElementById('date').innerHTML='Date: '+formattedDate;
+    }
+    
+   
+    document.getElementById('slider').addEventListener('input', function(e) {
+        var daysToAdd = parseInt(e.target.value, 10);//aka the index for each of the corresponding location arrays
+        date.setTime(initialDate.getTime() + daysToAdd*86400000);//explanation: https://stackoverflow.com/questions/6963311/add-days-to-a-date-object
+        updateDateLabel();
+        //filterBy(date);
     });
         
 </script>
