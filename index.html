@@ -21,8 +21,8 @@
             <div class="bar"></div>
             <p style="text-align:left;">
                 0
-                <span style="float:right;">
-                    10
+                <span style="float:right;" id="maxCases">
+                    10<!-- dummy max value, should never see it -->
                 </span>
             </p>
             <div style="text-align: center">Total Number of COVID-19 Cases to Date</div>
@@ -41,13 +41,18 @@
 </div>
 
 <script>
+    bounds = [
+        [-99, 39], //Southwest coordinates
+        [-71, 59] //Northeast coordinates
+    ]
     mapboxgl.accessToken = 'pk.eyJ1IjoiZHpjcCIsImEiOiJjazd3cDIwazYwNHd4M2RxdTQ1aWxwamF1In0.433QxPSQ-xAWDWFvD9b7lQ';
     var map = new mapboxgl.Map({
         container: 'map',
         style: 'mapbox://styles/dzcp/ck7xniymu1kvk1iqdiui4c151',
         center: [-79.38, 43.65],
         zoom:5,
-        attributionControl: false
+        attributionControl: false,
+        maxBounds: bounds
     });
     map.on('load', function()
     {
@@ -137,6 +142,9 @@
     function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
     }
+    
+    
+    document.getElementById('maxCases').innerHTML=numOfDates;//dummy way to change number of max cases, get max from dictionary for this
 </script>
 </body>
 
