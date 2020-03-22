@@ -25,7 +25,7 @@
     height: 10px;
     width: 100%;
     background: linear-gradient(to right, #f6bdc0, #dc1c13);
-    <!--colours taken from: https://www.schemecolor.com/red-gradient.php-->
+    /* colours taken from: https://www.schemecolor.com/red-gradient.php */
 }
 .map-overlay input {
     background-color: transparent;
@@ -37,6 +37,14 @@
 }
 #legend {
     text-align:left;
+}
+
+.table {
+    position: fixed;
+    bottom: 10px;
+    margin-bottom: 10px;
+    left: 32%;
+    background-color: #ddd;
 }
 
 .sidenav {
