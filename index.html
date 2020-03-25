@@ -188,14 +188,14 @@
     //so the ideal is that the database returns UID -> [Cases], this way locations and colours can be arrays and thus put into the match where index = UID
     //otherwise there's a lot of garbage code writing to do where you'd have to match every single individual health unit by name to it's colour 
 
-    function pickHex(){
+    /*function pickHex(){
         var colour1 = [255,255,255];
         var colour2 = [220,28,19];
         var w2 = daysToAdd/numOfDates;//weight for left colour
         var w1 = 1- w2;//weight for right colour
         var rgb = [Math.round(colour1[0]*w1+colour2[0]*w2),Math.round(colour1[1]*w1+colour2[1]*w2),Math.round([colour1[2]*w1+colour2[2]*w2)];
         return rgb;
-    }
+    }*/
     
     function openNav() {
         document.getElementById("mySidenav").style.width = "25%";
