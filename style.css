@@ -24,7 +24,7 @@
 .map-overlay .legend .bar {
     height: 10px;
     width: 100%;
-    background: linear-gradient(to right, #f6bdc0, #dc1c13);
+    background: linear-gradient(to right, rgb(255,255,255), rgb(220,28,19));
     /* colours taken from: https://www.schemecolor.com/red-gradient.php */
 }
 .map-overlay input {

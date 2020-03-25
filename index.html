@@ -28,7 +28,7 @@
                     -1<!-- dummy max value, should always be replaced by something in the script -->
                 </span>
             </p>
-            <div style="text-align: center">Total Number of COVID-19 Cases to Date</div>
+            <div style="text-align: center">Total Number of COVID-19 Cases to Date at Each Location</div>
         </div>
     </div>
 </div>
@@ -73,6 +73,21 @@
     });
     map.on('load', function()
     {
+        map.addSource('Assessment', {
+            type: 'vector',
+            url: 'mapbox://zenith404.ck837zzkb1nak2kmetcjm0osj-7b4iz'
+        });
+        map.addLayer(
+        {
+            'id': 'assessment',
+            'source': 'Assessment',
+            'source-layer': 'Covid_Assesment_Centres',
+            'type': 'circle',
+            'paint':{
+                'circle-color': 'green'
+            }
+        });
+        
         map.addSource('Borders', {
             type: 'vector',
             url: 'mapbox://dzcp.ascrkivb'
@@ -134,7 +149,7 @@
     
     
     document.getElementById('slider').appendChild(sliderInput);
-    
+    document.getElementById('maxCases').innerHTML=""+numOfDates;//replace numOfDates with an actual value, i.e. the max cases at a location
     
     updateDateLabel();
     
@@ -148,10 +163,40 @@
         var daysToAdd = parseInt(e.target.value, 10);//aka the index for each of the corresponding location arrays
         date.setTime(initialDate.getTime() + daysToAdd*86400000);//explanation: https://stackoverflow.com/questions/6963311/add-days-to-a-date-object
         updateDateLabel();
+        updateMap();
         //filterBy(date);
     });
+    
+    var cases = new Map();
+    var locations = ['Kingston, Frontenac and Lennox and Addington Health Unit', 'The District of Algoma Health Unit'];
+    
+    cases.set('Kingston, Frontenac and Lennox and Addington Health Unit', [0, 0, 2, 4, 6, 8, 9, 10, 15]);
+    
+    updateMap();
+    function updateMap(){
         
-        
+        map.setPaintProperty(
+        'border', 
+        'fill-color', 
+            ['match', 
+            ['get', 'ENG_LABEL'],
+            locations,
+            "hsl(301, 100%, 49%)",//could just replace the two hsl with an array of colours instead (hsl, rgb, doesn't matter), indices have to match tho
+            "hsl(206, 100%, 49%)"]
+            );// can't have match or case or anything without a fallback value, so you can't do a for loop through all locations cuz otherwise, only the last one is applied and the rest gets the fallback value
+    }
+    //so the ideal is that the database returns UID -> [Cases], this way locations and colours can be arrays and thus put into the match where index = UID
+    //otherwise there's a lot of garbage code writing to do where you'd have to match every single individual health unit by name to it's colour 
+
+    function pickHex(){
+        var colour1 = [255,255,255];
+        var colour2 = [220,28,19];
+        var w2 = daysToAdd/numOfDates;//weight for left colour
+        var w1 = 1- w2;//weight for right colour
+        var rgb = [Math.round(colour1[0]*w1+colour2[0]*w2),Math.round(colour1[1]*w1+colour2[1]*w2),Math.round([colour1[2]*w1+colour2[2]*w2)];
+        return rgb;
+    }
+    
     function openNav() {
         document.getElementById("mySidenav").style.width = "25%";
     }
@@ -161,7 +206,6 @@
     }
     
     
-    document.getElementById('maxCases').innerHTML=numOfDates;//dummy way to change number of max cases, get max from dictionary for this
 </script>
 </body>
 
