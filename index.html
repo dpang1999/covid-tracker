@@ -17,7 +17,7 @@
 
 <div class="map-overlay top">
     <div class="map-overlay-inner">
-        <label id="slider"><h2 id="date"></h2></label>
+        <label><h2 id="date"></h2><input type="range" min="0" max="1" class="slider" step="1", value="0" id="slider"></label>
     </div>
     <div class="map-overlay-inner">
         <div id="legend" class="legend">
@@ -73,26 +73,10 @@
     });
     map.on('load', function()
     {
-        map.addSource('Assessment', {
-            type: 'vector',
-            url: 'mapbox://zenith404.ck837zzkb1nak2kmetcjm0osj-7b4iz'
-        });
-        map.addLayer(
-        {
-            'id': 'assessment',
-            'source': 'Assessment',
-            'source-layer': 'Covid_Assesment_Centres',
-            'type': 'circle',
-            'paint':{
-                'circle-color': 'green'
-            }
-        });
-        
         map.addSource('Borders', {
             type: 'vector',
             url: 'mapbox://dzcp.ascrkivb'
         });
-       
         map.addLayer(
         {
             'id': 'border',
@@ -107,21 +91,33 @@
                 "North Bay Parry Sound District Health Unit",
                 "Kingston, Frontenac and Lennox and Addington Health Unit"], 
                 "hsl(301, 100%, 49%)",
+                'The District of Algoma Health Unit',
+                "hsl(150, 100%, 49%)",
                 "hsl(206, 100%, 49%)"
                 ],
-                'fill-opacity': 0.25,
-                'fill-outline-color': ['match',
-                ['get', 'ENG_LABEL'],
-                ["City of Toronto Health Unit",
-                "North Bay Parry Sound District Health Unit",
-                "Kingston, Frontenac and Lennox and Addington Health Unit"], 
-                "#ff0000",
-                "#ffffff"
-                ]
+                'fill-opacity': 0.33,
+                'fill-outline-color': "#ffffff"
                 }
         });
+        
+        map.addSource('Assessment', {
+            type: 'vector',
+            url: 'mapbox://zenith404.ck837zzkb1nak2kmetcjm0osj-7b4iz'
+        });
+        map.addLayer(
+        {
+            'id': 'assessment',
+            'source': 'Assessment',
+            'source-layer': 'Covid_Assesment_Centres',
+            'type': 'circle',
+            'paint':{
+                'circle-color': 'green'
+            }
+        });
     });
-
+    
+    
+    
     map.on('click', 'border', function(mouse) {
         var eng_name = mouse.features[0].properties.ENG_LABEL;
     	new mapboxgl.Popup()
@@ -140,15 +136,10 @@
     var date = new Date(2020, 0, 24);
     var currentDate = new Date();
     var numOfDates=Math.floor((currentDate.getTime()-initialDate.getTime())/86400000);
-    var sliderInput = document.createElement("input");
-    sliderInput.setAttribute("type", "range");
-    sliderInput.setAttribute("min", "0");
+    var sliderInput = document.getElementById("slider");
+    var daysToAdd=0;
     sliderInput.setAttribute("max", ""+numOfDates);
-    sliderInput.setAttribute("step", "1");
-    sliderInput.setAttribute("value", "0");
-    
-    
-    document.getElementById('slider').appendChild(sliderInput);
+
     document.getElementById('maxCases').innerHTML=""+numOfDates;//replace numOfDates with an actual value, i.e. the max cases at a location
     
     updateDateLabel();
@@ -160,42 +151,145 @@
     
    //The big slider event listener, need this to update the map as well, current date is updated here as well
     document.getElementById('slider').addEventListener('input', function(e) {
-        var daysToAdd = parseInt(e.target.value, 10);//aka the index for each of the corresponding location arrays
+        daysToAdd = parseInt(e.target.value, 10);//aka the index for each of the corresponding location arrays
         date.setTime(initialDate.getTime() + daysToAdd*86400000);//explanation: https://stackoverflow.com/questions/6963311/add-days-to-a-date-object
         updateDateLabel();
         updateMap();
         //filterBy(date);
     });
-    
     var cases = new Map();
-    var locations = ['Kingston, Frontenac and Lennox and Addington Health Unit', 'The District of Algoma Health Unit'];
-    
-    cases.set('Kingston, Frontenac and Lennox and Addington Health Unit', [0, 0, 2, 4, 6, 8, 9, 10, 15]);
-    
+    //there should be 34 health units
+    //VVV important, Southwestern = Elgin + Oxford, they merged in 2018 and it hasn't been reflected in the boundaries
+    cases.set('Kingston, Frontenac and Lennox and Addington Health Unit', [0,0,1,4,9,11,24,30]);
+    cases.set('The District of Algoma Health Unit', [0,0,1,1,3,5,5,5]);
+    //instead of calculating the RgB every time, calculate colours and put it into a 2-d array when a day is requested, 
+    //mark down which days have been requested and have an if statement to check if there's colours in the 2-d array already, if not, calculate and store it
     updateMap();
     function updateMap(){
-        
         map.setPaintProperty(
         'border', 
         'fill-color', 
             ['match', 
             ['get', 'ENG_LABEL'],
-            locations,
-            "hsl(301, 100%, 49%)",//could just replace the two hsl with an array of colours instead (hsl, rgb, doesn't matter), indices have to match tho
-            "hsl(206, 100%, 49%)"]
-            );// can't have match or case or anything without a fallback value, so you can't do a for loop through all locations cuz otherwise, only the last one is applied and the rest gets the fallback value
+            'Northwestern Health Unit',
+            pickRGB(cases.get('Northwestern Health Unit')[daysToAdd]),
+            
+            'Thunder Bay District Health Unit',
+            pickRGB(cases.get('Thunder Bay Disctrict Health Unit')[daysToAdd]),
+            
+            'Porcupine Health Unit',
+            pickRGB(cases.get('Porcupine Health Unit')[daysToAdd]),
+            
+            'The District of Algoma Health Unit',
+            pickRGB(cases.get('The District of Algoma Health Unit')[daysToAdd]),
+            
+            'Sudbury and District Health Unit',
+            pickRGB(cases.get('Sudbury and District Health Unit')[daysToAdd]),
+            
+            'Timiskaming Health Unit',
+            pickRGB(cases.get('Timiskaming Health Unit')[daysToAdd]),
+            
+            'North Bay Parry Sound District Health Unit',
+            pickRGB(cases.get('North Bay Parry Sound District Health Unit')[daysToAdd]),
+            
+            'Renfrew County and District Health Unit',
+            pickRGB(cases.get('Renfrew County and District Health Unit')[daysToAdd]),
+            
+            'City of Ottawa Health Unit',
+            pickRGB(cases.get('City of Ottawa Health Unit')[daysToAdd]),
+            
+            'The Eastern Ontario Health Unit',
+            pickRGB(cases.get('The Eastern Ontario Health Unit')[daysToAdd]),
+            
+            'Simcoe Muskoka District Health Unit',
+            pickRGB(cases.get('Simcoe Muskoka District Health Unit')[daysToAdd]),
+            
+            'Haliburton, Kawartha, Pine Ridge District Health Unit',
+            pickRGB(cases.get('Haliburton, Kawartha, Pine Ridge Disctrict Health Unit')[daysToAdd]),
+            
+            'Peterborough County - City Health Unit',
+            pickRGB(cases.get('Peterborough County - City Health Unit')[daysToAdd]),
+            
+            'Hastings and Prince Edward Counties Health Unit',
+            pickRGB(cases.get('Hastings and Prince Edward Counties Health Unit')[daysToAdd]),
+            
+            'Kingston, Frontenac and Lennox and Addington Health Unit',
+            pickRGB(cases.get('Kingston, Frontenac and Lennox and Addington Health Unit')[daysToAdd]),
+            
+            'Leeds, Grenville and Lanark District Health Unit',
+            pickRGB(cases.get('Leeds, Grenville and Lanark District Health Unit')[daysToAdd]),
+            
+            'Grey Bruce Health Unit',
+            pickRGB(cases.get('Grey Bruce Health Unit')[daysToAdd]),
+            
+            'York Regional Health Unit',
+            pickRGB(cases.get('York Regional Health Unit')[daysToAdd]),
+            
+            'Durham Regional Health Unit',
+            pickRGB(cases.get('Durham Regional Health Unit')[daysToAdd]),
+            
+            'Huron County Health Unit',
+            pickRGB(cases.get('Huron County Health Unit')[daysToAdd]),
+            
+            'Wellington-Duffering-Guelph Health Unit',
+            pickRGB(cases.get('Wellington-Duffering-Guelph Health Unit')[daysToAdd]),
+            
+            'Peel Regional Health Unit',
+            pickRGB(cases.get('Peel Regional Health Unit')[daysToAdd]),
+            
+            'City of Toronto Health Unit',
+            pickRGB(cases.get('City of Toronto Health Unit')[daysToAdd]),
+            
+            'Perth District Health Unit',
+            pickRGB(cases.get('Perth District Health Unit')[daysToAdd]),
+            
+            'Waterloo Health Unit',
+            pickRGB(cases.get('Waterloo Health Unit')[daysToAdd]),
+            
+            'Halton Regional Health Unit',
+            pickRGB(cases.get('Halton Regional Health Unit')[daysToAdd]),
+            
+            'Lambton Health Unit',
+            pickRGB(cases.get('Lambton Health Unit')[daysToAdd]),
+            
+            'Middlesex-London Health Unit',
+            pickRGB(cases.get('Middlesex-London Health Unit')[daysToAdd]),
+            
+            'Oxford County Health Unit',
+            pickRGB(cases.get('Southwestern Health Unit')[daysToAdd]),//oxford and elgin merged into southwestern
+            
+            'Brant County Health Unit',
+            pickRGB(cases.get('Brant County Health Unit')[daysToAdd]),
+            
+            'City of Hamilton Health Unit',
+            pickRGB(cases.get('City of Hamilton Health Unit')[daysToAdd]),
+            
+            'Niagara Regional Area Health Unit',
+            pickRGB(cases.get('Niagara Regional Area Health Unit')[daysToAdd]),
+            
+            'Chatham-Kent Health Unit',
+            pickRGB(cases.get('Chatham-Kent Health Unit')[daysToAdd]),
+            
+            'Elgin-St. Thomas Health Unit',
+            pickRGB(cases.get('Southwestern Health Unit')[daysToAdd]),//oxford and elgin merged into southwestern
+            
+            'Haldimand-Norfolk Health Unit',
+            pickRGB(cases.get('Haldimand-Norfolk Health Unit')[daysToAdd]),
+            
+            "rgb(0, 0, 0)"]
+        );// can't have match or case or anything without a fallback value, so you can't do a for loop through all locations cuz otherwise, only the last one is applied and the rest gets the fallback value
     }
     //so the ideal is that the database returns UID -> [Cases], this way locations and colours can be arrays and thus put into the match where index = UID
     //otherwise there's a lot of garbage code writing to do where you'd have to match every single individual health unit by name to it's colour 
 
-    /*function pickHex(){
+    function pickRGB(cases){
         var colour1 = [255,255,255];
         var colour2 = [220,28,19];
-        var w2 = daysToAdd/numOfDates;//weight for left colour
+        var w2 = cases/30;//weight for left colour, replace num of dates with count of most red
         var w1 = 1- w2;//weight for right colour
-        var rgb = [Math.round(colour1[0]*w1+colour2[0]*w2),Math.round(colour1[1]*w1+colour2[1]*w2),Math.round([colour1[2]*w1+colour2[2]*w2)];
+        var rgb = 'rgb('+Math.round(colour1[0]*w1+colour2[0]*w2)+','+Math.round(colour1[1]*w1+colour2[1]*w2)+','+Math.round(colour1[2]*w1+colour2[2]*w2)+')';
         return rgb;
-    }*/
+    }
     
     function openNav() {
         document.getElementById("mySidenav").style.width = "25%";
