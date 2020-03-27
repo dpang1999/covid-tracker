@@ -185,109 +185,112 @@
             ['get', 'ENG_LABEL'],
             
             'Northwestern Health Unit',
-            pickRGB(data['Northwestern'][daysToAdd]),
+            pickColour(data['Northwestern'][daysToAdd]),
             
             'Thunder Bay District Health Unit',
-            pickRGB(data['Thunder'][daysToAdd]),
+            pickColour(data['Thunder'][daysToAdd]),
             
             'Porcupine Health Unit',
-            pickRGB(data['Porcupine'][daysToAdd]),
+            pickColour(data['Porcupine'][daysToAdd]),
             
             'The District of Algoma Health Unit',
             pickColour(data['Algoma'][daysToAdd]),
             
             'Sudbury and District Health Unit',
-            pickRGB(data['Sudbury'][daysToAdd]),
+            pickColour(data['Sudbury'][daysToAdd]),
             
             'Timiskaming Health Unit',
-            pickRGB(data['Timiskaming'][daysToAdd]),
+            pickColour(data['Timiskaming'][daysToAdd]),
             
             'North Bay Parry Sound District Health Unit',
-            pickRGB(data['North'][daysToAdd]),
+            pickColour(data['North'][daysToAdd]),
             
             'Renfrew County and District Health Unit',
-            pickRGB(data['Renfrew'][daysToAdd]),
+            pickColour(data['Renfrew'][daysToAdd]),
             
             'City of Ottawa Health Unit',
-            pickRGB(data['Ottawa'][daysToAdd]),
+            pickColour(data['Ottawa'][daysToAdd]),
             
             'The Eastern Ontario Health Unit',
-            pickRGB(data['Eastern'][daysToAdd]),
+            pickColour(data['Eastern'][daysToAdd]),
             
             'Simcoe Muskoka District Health Unit',
-            pickRGB(data['Simcoe'][daysToAdd]),
+            pickColour(data['Simcoe'][daysToAdd]),
             
             'Haliburton, Kawartha, Pine Ridge District Health Unit',
-            pickRGB(data['Haliburton'][daysToAdd]),
+            pickColour(data['Haliburton'][daysToAdd]),
             
             'Peterborough County - City Health Unit',
-            pickRGB(data['Peterborough'][daysToAdd]),
+            pickColour(data['Peterborough'][daysToAdd]),
             
             'Hastings and Prince Edward Counties Health Unit',
-            pickRGB(data['Hastings'][daysToAdd]),
+            pickColour(data['Hastings'][daysToAdd]),
             
             'Kingston, Frontenac and Lennox and Addington Health Unit',
             pickColour(data['Kingston'][daysToAdd]),
             
             'Leeds, Grenville and Lanark District Health Unit',
-            pickRGB(data['Leeds'][daysToAdd]),
+            pickColour(data['Leeds'][daysToAdd]),
             
             'Grey Bruce Health Unit',
-            pickRGB(data['Grey'][daysToAdd]),
+            pickColour(data['Grey'][daysToAdd]),
             
             'York Regional Health Unit',
-            pickRGB(data['York'][daysToAdd]),
+            pickColour(data['York'][daysToAdd]),
             
             'Durham Regional Health Unit',
-            pickRGB(data['Durham'][daysToAdd]),
+            pickColour(data['Durham'][daysToAdd]),
             
             'Huron County Health Unit',
-            pickRGB(data['Huron'][daysToAdd]),
+            pickColour(data['Huron'][daysToAdd]),
             
-            'Wellington-Duffering-Guelph Health Unit',
-            pickRGB(data['Wellington'][daysToAdd]),
+            'Wellington-Dufferin-Guelph Health Unit',
+            pickColour(data['Wellington'][daysToAdd]),
             
             'Peel Regional Health Unit',
-            pickRGB(data['Peel'][daysToAdd]),
+            pickColour(data['Peel'][daysToAdd]),
             
             'City of Toronto Health Unit',
-            pickRGB(data['Toronto'][daysToAdd]),
+            pickColour(data['Toronto'][daysToAdd]),
             
             'Perth District Health Unit',
-            pickRGB(data['Perth'][daysToAdd]),
+            pickColour(data['Perth'][daysToAdd]),
             
             'Waterloo Health Unit',
-            pickRGB(data['Waterloo'][daysToAdd]),
+            pickColour(data['Waterloo'][daysToAdd]),
             
             'Halton Regional Health Unit',
-            pickRGB(data['Halton'][daysToAdd]),
+            pickColour(data['Halton'][daysToAdd]),
             
             'Lambton Health Unit',
-            pickRGB(data['Lambton'][daysToAdd]),
+            pickColour(data['Lambton'][daysToAdd]),
             
             'Middlesex-London Health Unit',
-            pickRGB(data['Middlesex'][daysToAdd]),
+            pickColour(data['Middlesex'][daysToAdd]),
             
             'Oxford County Health Unit',
-            pickRGB(data['Oxford'][daysToAdd]),
+            pickColour(data['Oxford'][daysToAdd]),
             
             'Brant County Health Unit',
-            pickRGB(data['Brant'][daysToAdd]),
+            pickColour(data['Brant'][daysToAdd]),
             
             'City of Hamilton Health Unit',
-            pickRGB(data['Hamilton'][daysToAdd]),
+            pickColour(data['Hamilton'][daysToAdd]),
             
             'Niagara Regional Area Health Unit',
-            pickRGB(data['Niagara'][daysToAdd]),
+            pickColour(data['Niagara'][daysToAdd]),
             
             'Chatham-Kent Health Unit',
-            pickRGB(data['Chatham'][daysToAdd]),
+            pickColour(data['Chatham'][daysToAdd]),
             
             'Elgin-St. Thomas Health Unit',
-            pickRGB(data['Oxford'][daysToAdd]),
+            pickColour(data['Oxford'][daysToAdd]),
             
             'Haldimand-Norfolk Health Unit',
-            pickRGB(data['Haldimand'][daysToAdd]),
+            pickColour(data['Haldimand'][daysToAdd]),
+            
+            'Windsor-Essex County Health Unit',
+            pickColour(data['Windsor'][daysToAdd]),
             
             "rgb(0, 0, 0)"]
         );// can't have match or case or anything without a fallback value, so you can't do a for loop through all locations cuz otherwise, only the last one is applied and the rest gets the fallback value
@@ -295,6 +298,7 @@
     //so the ideal is that the database returns UID -> [Cases], this way locations and colours can be arrays and thus put into the match where index = UID
     //otherwise there's a lot of garbage code writing to do where you'd have to match every single individual health unit by name to it's colour 
 
+    //not in use anymore
     function pickRGB(cases){
         var colour1 = [255,255,255];
         var colour2 = [220,28,19];
