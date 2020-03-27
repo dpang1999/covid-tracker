@@ -7,7 +7,7 @@
     z-index:-1;
 }
 .map-overlay {
-    font: 12px/20px 'Helvetica Neue', Arial, Helvetica, sans-serif;
+    font: 12px/20px Arial, Helvetica, sans-serif;
     position: fixed;
     width: 25%;
     left: 5px;
@@ -24,7 +24,10 @@
 .map-overlay .legend .bar {
     height: 10px;
     width: 100%;
-    background: linear-gradient(to right, rgb(255,255,255), rgb(220,28,19));
+    background: linear-gradient(to right, white, yellow, orange, orangered, red);
+    border-style: solid;
+    border-width: 1px;
+    /* no point adjusting colours for opacity because the human brain attemtps to correct for colour based on surroundings anyways, so it looks wrong
     /* colours taken from: https://www.schemecolor.com/red-gradient.php */
 }
 .map-overlay input {
@@ -81,6 +84,11 @@
     right: 25px;
     font-size: 36px;
     margin-left: 50px;
+}
+
+.table {
+    font-family: Arial;
+    font-size: 15px;
 }
 
 @media screen and (max-height: 450px) {
