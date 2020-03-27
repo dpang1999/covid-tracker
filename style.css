@@ -15,7 +15,8 @@
     padding: 10px;
 }
 #pending {
-    background-color: #fff;
+    background-color: #ddd;
+    text-align:center;
 }
 .map-overlay .map-overlay-inner {
     background-color: #fff;
