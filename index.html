@@ -87,7 +87,7 @@
         maxCases = data['Toronto'][numOfDates];
         sliderInput.setAttribute("max", ""+numOfDates);
         document.getElementById('maxCases').innerHTML=""+maxCases;//replace numOfDates with an actual value, i.e. the max cases at a location
-        document.getElementById('pending').innerHTML="Total Number of Pending Cases as of " + months[databaseDate.getMonth()] + ' ' + databaseDate.getDate() + ', ' + databaseDate.getFullYear() + ": " + data['pending'][numOfDates];//fill pending here
+        document.getElementById('pending').innerHTML="Total Number of <strong>Pending</strong> Cases as of <strong>" + months[databaseDate.getMonth()] + ' ' + databaseDate.getDate() + ', ' + databaseDate.getFullYear() + ": " + data['pending'][numOfDates]+"</strong>";
     });
     
 
