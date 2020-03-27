@@ -37,9 +37,9 @@
     <table>
         <tr>
             <th> In Ontario: </th>
-            <th id="negative"style="color:green" width="150px" align="left"> Negative - </th>
-            <th id="confirmed" style="color:#ff8c00" width="150px" align="left"> Confirmed - </th>
-            <th id="deceased" style="color:red" width="150px" align="left"> Deceased - </th>
+            <th id="negative"style="color:green; font:Arial" width="150px" align="left"> Negative - </th>
+            <th id="confirmed" style="color:#ff8c00; font:Arial" width="150px" align="left"> Confirmed - </th>
+            <th id="deceased" style="color:red; font:Arial" width="150px" align="left"> Deceased - </th>
         </tr>
     </table>
 </div>
@@ -55,9 +55,34 @@
   <a href="#" target="_blank">Buy Us A Coffee</a>
 </div>
 
+<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-database.js"></script>
 
 
 <script>
+
+    var firebaseConfig = {
+        apiKey: "AIzaSyBmznggzZWJ-fn4mQqrN0OgGqbxmAcLOF0",
+        authDomain: "covidtracker-4da2a.firebaseapp.com",
+        databaseURL: "https://covidtracker-4da2a.firebaseio.com",
+        projectId: "covidtracker-4da2a",
+        storageBucket: "covidtracker-4da2a.appspot.com",
+        messagingSenderId: "820832515003",
+        appId: "1:820832515003:web:60c2cd370fb99c2235ca9e",
+        measurementId: "G-3T827RGVJW"
+    };
+    firebase.initializeApp(firebaseConfig);
+    var data = {};
+    var query = firebase.database().ref("data");
+    query.once("value").then(function(snapshot){
+        snapshot.forEach(function(childSnapshot){
+            data[childSnapshot.key] = childSnapshot.val();
+        });
+    });
+    console.log(data);
+
     bounds = [
         [-99, 39], //Southwest coordinates
         [-71, 59] //Northeast coordinates
@@ -125,7 +150,7 @@
     var initialDate = new Date(2020, 0, 24);
     var date = new Date(2020, 0, 24);
     var currentDate = new Date();
-    var numOfDates=Math.floor((currentDate.getTime()-initialDate.getTime())/86400000);
+    var numOfDates=Math.floor((currentDate.getTime()-initialDate.getTime())/86400000)-1;
     var sliderInput = document.getElementById("slider");
     var daysToAdd=0;
     sliderInput.setAttribute("max", ""+numOfDates);
@@ -148,11 +173,8 @@
         updateMap();
         //filterBy(date);
     });
-    var cases = new Map();
     //there should be 34 health units
     //VVV important, Southwestern = Elgin + Oxford, they merged in 2018 and it hasn't been reflected in the boundaries
-    cases.set('Kingston, Frontenac and Lennox and Addington Health Unit', [0,0,1,4,9,13,24,30]);
-    cases.set('The District of Algoma Health Unit', [0,0,1,1,3,5,5,5]);
     //instead of calculating the RgB every time, calculate colours and put it into a 2-d array when a day is requested, 
     //mark down which days have been requested and have an if statement to check if there's colours in the 2-d array already, if not, calculate and store it
     function updateMap(){
@@ -162,110 +184,110 @@
             ['match', 
             ['get', 'ENG_LABEL'],
             
-            <!-- 'Northwestern Health Unit', -->
-            <!-- pickRGB(cases.get('Northwestern Health Unit')[daysToAdd]), -->
+            'Northwestern Health Unit',
+            pickRGB(data['Northwestern'][daysToAdd]),
             
-            <!-- 'Thunder Bay District Health Unit', -->
-            <!-- pickRGB(cases.get('Thunder Bay Disctrict Health Unit')[daysToAdd]), -->
+            'Thunder Bay District Health Unit',
+            pickRGB(data['Thunder'][daysToAdd]),
             
-            <!-- 'Porcupine Health Unit', -->
-            <!-- pickRGB(cases.get('Porcupine Health Unit')[daysToAdd]), -->
+            'Porcupine Health Unit',
+            pickRGB(data['Porcupine'][daysToAdd]),
             
             'The District of Algoma Health Unit',
-            pickColour(cases.get('The District of Algoma Health Unit')[daysToAdd]),
+            pickColour(data['Algoma'][daysToAdd]),
             
-            <!-- 'Sudbury and District Health Unit', -->
-            <!-- pickRGB(cases.get('Sudbury and District Health Unit')[daysToAdd]), -->
+            'Sudbury and District Health Unit',
+            pickRGB(data['Sudbury'][daysToAdd]),
             
-            <!-- 'Timiskaming Health Unit', -->
-            <!-- pickRGB(cases.get('Timiskaming Health Unit')[daysToAdd]), -->
+            'Timiskaming Health Unit',
+            pickRGB(data['Timiskaming'][daysToAdd]),
             
-            <!-- 'North Bay Parry Sound District Health Unit', -->
-            <!-- pickRGB(cases.get('North Bay Parry Sound District Health Unit')[daysToAdd]), -->
+            'North Bay Parry Sound District Health Unit',
+            pickRGB(data['North'][daysToAdd]),
             
-            <!-- 'Renfrew County and District Health Unit', -->
-            <!-- pickRGB(cases.get('Renfrew County and District Health Unit')[daysToAdd]), -->
+            'Renfrew County and District Health Unit',
+            pickRGB(data['Renfrew'][daysToAdd]),
             
-            <!-- 'City of Ottawa Health Unit', -->
-            <!-- pickRGB(cases.get('City of Ottawa Health Unit')[daysToAdd]), -->
+            'City of Ottawa Health Unit',
+            pickRGB(data['Ottawa'][daysToAdd]),
             
-            <!-- 'The Eastern Ontario Health Unit', -->
-            <!-- pickRGB(cases.get('The Eastern Ontario Health Unit')[daysToAdd]), -->
+            'The Eastern Ontario Health Unit',
+            pickRGB(data['Eastern'][daysToAdd]),
             
-            <!-- 'Simcoe Muskoka District Health Unit', -->
-            <!-- pickRGB(cases.get('Simcoe Muskoka District Health Unit')[daysToAdd]), -->
+            'Simcoe Muskoka District Health Unit',
+            pickRGB(data['Simcoe'][daysToAdd]),
             
-            <!-- 'Haliburton, Kawartha, Pine Ridge District Health Unit', -->
-            <!-- pickRGB(cases.get('Haliburton, Kawartha, Pine Ridge Disctrict Health Unit')[daysToAdd]), -->
+            'Haliburton, Kawartha, Pine Ridge District Health Unit',
+            pickRGB(data['Haliburton'][daysToAdd]),
             
-            <!-- 'Peterborough County - City Health Unit', -->
-            <!-- pickRGB(cases.get('Peterborough County - City Health Unit')[daysToAdd]), -->
+            'Peterborough County - City Health Unit',
+            pickRGB(data['Peterborough'][daysToAdd]),
             
-            <!-- 'Hastings and Prince Edward Counties Health Unit', -->
-            <!-- pickRGB(cases.get('Hastings and Prince Edward Counties Health Unit')[daysToAdd]), -->
+            'Hastings and Prince Edward Counties Health Unit',
+            pickRGB(data['Hastings'][daysToAdd]),
             
             'Kingston, Frontenac and Lennox and Addington Health Unit',
-            pickColour(cases.get('Kingston, Frontenac and Lennox and Addington Health Unit')[daysToAdd]),
+            pickColour(data['Kingston'][daysToAdd]),
             
-            <!-- 'Leeds, Grenville and Lanark District Health Unit', -->
-            <!-- pickRGB(cases.get('Leeds, Grenville and Lanark District Health Unit')[daysToAdd]), -->
+            'Leeds, Grenville and Lanark District Health Unit',
+            pickRGB(data['Leeds'][daysToAdd]),
             
-            <!-- 'Grey Bruce Health Unit', -->
-            <!-- pickRGB(cases.get('Grey Bruce Health Unit')[daysToAdd]), -->
+            'Grey Bruce Health Unit',
+            pickRGB(data['Grey'][daysToAdd]),
             
-            <!-- 'York Regional Health Unit', -->
-            <!-- pickRGB(cases.get('York Regional Health Unit')[daysToAdd]), -->
+            'York Regional Health Unit',
+            pickRGB(data['York'][daysToAdd]),
             
-            <!-- 'Durham Regional Health Unit', -->
-            <!-- pickRGB(cases.get('Durham Regional Health Unit')[daysToAdd]), -->
+            'Durham Regional Health Unit',
+            pickRGB(data['Durham'][daysToAdd]),
             
-            <!-- 'Huron County Health Unit', -->
-            <!-- pickRGB(cases.get('Huron County Health Unit')[daysToAdd]), -->
+            'Huron County Health Unit',
+            pickRGB(data['Huron'][daysToAdd]),
             
-            <!-- 'Wellington-Duffering-Guelph Health Unit', -->
-            <!-- pickRGB(cases.get('Wellington-Duffering-Guelph Health Unit')[daysToAdd]), -->
+            'Wellington-Duffering-Guelph Health Unit',
+            pickRGB(data['Wellington'][daysToAdd]),
             
-            <!-- 'Peel Regional Health Unit', -->
-            <!-- pickRGB(cases.get('Peel Regional Health Unit')[daysToAdd]), -->
+            'Peel Regional Health Unit',
+            pickRGB(data['Peel'][daysToAdd]),
             
-            <!-- 'City of Toronto Health Unit', -->
-            <!-- pickRGB(cases.get('City of Toronto Health Unit')[daysToAdd]), -->
+            'City of Toronto Health Unit',
+            pickRGB(data['Toronto'][daysToAdd]),
             
-            <!-- 'Perth District Health Unit', -->
-            <!-- pickRGB(cases.get('Perth District Health Unit')[daysToAdd]), -->
+            'Perth District Health Unit',
+            pickRGB(data['Perth'][daysToAdd]),
             
-            <!-- 'Waterloo Health Unit', -->
-            <!-- pickRGB(cases.get('Waterloo Health Unit')[daysToAdd]), -->
+            'Waterloo Health Unit',
+            pickRGB(data['Waterloo'][daysToAdd]),
             
-            <!-- 'Halton Regional Health Unit', -->
-            <!-- pickRGB(cases.get('Halton Regional Health Unit')[daysToAdd]), -->
+            'Halton Regional Health Unit',
+            pickRGB(data['Halton'][daysToAdd]),
             
-            <!-- 'Lambton Health Unit', -->
-            <!-- pickRGB(cases.get('Lambton Health Unit')[daysToAdd]), -->
+            'Lambton Health Unit',
+            pickRGB(data['Lambton'][daysToAdd]),
             
-            <!-- 'Middlesex-London Health Unit', -->
-            <!-- pickRGB(cases.get('Middlesex-London Health Unit')[daysToAdd]), -->
+            'Middlesex-London Health Unit',
+            pickRGB(data['Middlesex'][daysToAdd]),
             
-            <!-- 'Oxford County Health Unit', -->
-            <!-- pickRGB(cases.get('Southwestern Health Unit')[daysToAdd]),//oxford and elgin merged into southwestern -->
+            'Oxford County Health Unit',
+            pickRGB(data['Oxford'][daysToAdd]),
             
-            <!-- 'Brant County Health Unit', -->
-            <!-- pickRGB(cases.get('Brant County Health Unit')[daysToAdd]), -->
+            'Brant County Health Unit',
+            pickRGB(data['Brant'][daysToAdd]),
             
-            <!-- 'City of Hamilton Health Unit', -->
-            <!-- pickRGB(cases.get('City of Hamilton Health Unit')[daysToAdd]), -->
+            'City of Hamilton Health Unit',
+            pickRGB(data['Hamilton'][daysToAdd]),
             
-            <!-- 'Niagara Regional Area Health Unit', -->
-            <!-- pickRGB(cases.get('Niagara Regional Area Health Unit')[daysToAdd]), -->
+            'Niagara Regional Area Health Unit',
+            pickRGB(data['Niagara'][daysToAdd]),
             
-            <!-- 'Chatham-Kent Health Unit', -->
-            <!-- pickRGB(cases.get('Chatham-Kent Health Unit')[daysToAdd]), -->
+            'Chatham-Kent Health Unit',
+            pickRGB(data['Chatham'][daysToAdd]),
             
-            <!-- 'Elgin-St. Thomas Health Unit', -->
-            <!-- pickRGB(cases.get('Southwestern Health Unit')[daysToAdd]),//oxford and elgin merged into southwestern -->
+            'Elgin-St. Thomas Health Unit',
+            pickRGB(data['Oxford'][daysToAdd]),
             
-            <!-- 'Haldimand-Norfolk Health Unit', -->
-            <!-- pickRGB(cases.get('Haldimand-Norfolk Health Unit')[daysToAdd]), -->
+            'Haldimand-Norfolk Health Unit',
+            pickRGB(data['Haldimand'][daysToAdd]),
             
             "rgb(0, 0, 0)"]
         );// can't have match or case or anything without a fallback value, so you can't do a for loop through all locations cuz otherwise, only the last one is applied and the rest gets the fallback value
@@ -298,6 +320,10 @@
         else if(cases>maxCases*0.2)
         {
             return 'yellow';
+        }
+        else if (cases>0)
+        {
+            return 'lightyellow';
         }
         else
         {
