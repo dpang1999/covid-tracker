@@ -43,7 +43,7 @@
         </tr>
     </table>
     <div id="pending">
-        <p> Total Number of Pending Cases: </p>
+        <p> Total Number of Pending Cases as of January 24, 2020: 0 </p>
     </div>
 </div>
 
@@ -87,7 +87,7 @@
         maxCases = data['Toronto'][numOfDates];
         sliderInput.setAttribute("max", ""+numOfDates);
         document.getElementById('maxCases').innerHTML=""+maxCases;//replace numOfDates with an actual value, i.e. the max cases at a location
-        document.getElementById('pending').innerHTML="Total Number of Pending Cases: "+data['pending'][numOfDates];//fill pending here
+        document.getElementById('pending').innerHTML="Total Number of Pending Cases as of " + months[databaseDate.getMonth()] + ' ' + databaseDate.getDate() + ', ' + databaseDate.getFullYear() + ": " + data['pending'][numOfDates];//fill pending here
     });
     
 
@@ -264,6 +264,8 @@
     var initialDate = new Date(2020, 0, 24);
     var date = new Date(2020, 0, 24);
     var currentDate = new Date();
+    var databaseDate = new Date();
+    databaseDate.setDate(currentDate.getDate()-1);
     var numOfDates=Math.floor((currentDate.getTime()-initialDate.getTime())/86400000)-1;
     var sliderInput = document.getElementById("slider");
     var daysToAdd=0;
