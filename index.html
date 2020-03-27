@@ -16,6 +16,9 @@
 <div id='map'></div>
 
 <div class="map-overlay top">
+    <div id="pending">
+        <p style="text-align:left"> Total Number of Pending Cases: </p>
+    </div>
     <div class="map-overlay-inner">
         <label><h2 id="date"></h2><input type="range" min="0" max="1" class="slider" step="1", value="0" id="slider"></label>
     </div>
@@ -28,7 +31,7 @@
                     -1<!-- dummy max value, should always be replaced by something in the script -->
                 </span>
             </p>
-            <div style="text-align: center">Total Number of COVID-19 Cases to Date at Each Location</div>
+            <div style="text-align: center">Total Number of Confirmed COVID-19 Cases to Date at Each Location</div>
         </div>
     </div>
 </div>
@@ -84,6 +87,7 @@
         maxCases = data['Toronto'][numOfDates];
         sliderInput.setAttribute("max", ""+numOfDates);
         document.getElementById('maxCases').innerHTML=""+maxCases;//replace numOfDates with an actual value, i.e. the max cases at a location
+        document.getElementById('pending').innerHTML="Total Number of Pending Cases: "+data['pending'][numOfDates];//fill pending here
     });
     
 
@@ -223,6 +227,8 @@
     });
     map.on('click', 'border', function(mouse) {
         var eng_name = mouse.features[0].properties.ENG_LABEL;
+        var yesterday=daysToAdd-1;
+        if(daysToAdd==0){yesterday=0;}
     	popup
     		.setLngLat(mouse.lngLat)
     		.setHTML(
@@ -231,7 +237,8 @@
 				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">" + eng_name + "</span></span></strong></p>" +
 				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">" + mouse.features[0].properties.FRE_LABEL + "</span></span></strong></p>" +
 				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\"> <a href=" + websites.get(eng_name) + " target=\"_blank\"> Health Unit Website </a></span></span></strong></p>" +
-    			"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">Number of Cases to Date: " + data[names.get(eng_name)][daysToAdd] + "</span></span></strong></p>"
+    			"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">Number of Cases to Date: " + data[names.get(eng_name)][daysToAdd] + "</span></span></strong></p>" +
+                "<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">Number of Cases on the Day: " + (data[names.get(eng_name)][daysToAdd] - data[names.get(eng_name)][yesterday]) + "</span></span></strong></p>"
                 )
     		.addTo(map);
     });
@@ -412,23 +419,27 @@
     }
     
     function pickColour(cases){
-        if(cases>maxCases*0.8)
+        if(cases>maxCases*5/6)
         {
-            return 'red';
+            return '#ff0000';
         }
-        else if(cases>maxCases*0.6)
+        else if(cases>maxCases*4/6)
         {
-            return 'orangered';
+            return '#ff5a00';
         }
-        else if(cases>maxCases*0.4)
+        else if(cases>maxCases*3/6)
         {
-            return 'orange';
+            return '#ff9a00';
         }
-        else if(cases>maxCases*0.2)
+        else if(cases>maxCases*2/6)
         {
-            return 'yellow';
+            return '#ffce00';
         }
-        else if (cases>0)
+        else if(cases>maxCases*1/6)
+        {
+            return '#f0ff00';
+        }
+        else if (cases>0/6)
         {
             return 'khaki';
         }
