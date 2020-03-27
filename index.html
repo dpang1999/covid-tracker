@@ -75,13 +75,17 @@
     };
     firebase.initializeApp(firebaseConfig);
     var data = {};
+    var maxCases=-1;
     var query = firebase.database().ref("data");
     query.once("value").then(function(snapshot){
         snapshot.forEach(function(childSnapshot){
             data[childSnapshot.key] = childSnapshot.val();
         });
+        maxCases = data['Toronto'][numOfDates];
+        sliderInput.setAttribute("max", ""+numOfDates);
+        document.getElementById('maxCases').innerHTML=""+maxCases;//replace numOfDates with an actual value, i.e. the max cases at a location
     });
-    console.log(data);
+    
 
     bounds = [
         [-99, 39], //Southwest coordinates
@@ -131,21 +135,124 @@
         updateMap();
     });
     
-    
-    
+
+    var names = new Map();
+    function buildNamesMap(){
+        names.set('Northwestern Health Unit', 'Northwestern');
+        names.set('Thunder Bay District Health Unit', 'Thunder');
+        names.set('Porcupine Health Unit', 'Porcupine');
+        names.set('The District of Algoma Health Unit', 'Algoma');
+        names.set('Sudbury and District Health Unit', 'Sudbury');
+        names.set('Timiskaming Health Unit', 'Timiskaming');
+        names.set('North Bay Parry Sound District Health Unit', 'North');
+        names.set('Renfrew County and District Health Unit', 'Renfrew');
+        names.set('City of Ottawa Health Unit', 'Ottawa');
+        names.set('The Eastern Ontario Health Unit', 'Eastern');
+        names.set('Simcoe Muskoka District Health Unit', 'Simcoe');
+        names.set('Haliburton, Kawartha, Pine Ridge District Health Unit', 'Haliburton');
+        names.set('Peterborough County - City Health Unit', 'Peterborough');
+        names.set('Hastings and Prince Edward Counties Health Unit', 'Hastings');
+        names.set('Kingston, Frontenac and Lennox and Addington Health Unit', 'Kingston');
+        names.set('Leeds, Grenville and Lanark District Health Unit', 'Leeds');
+        names.set('Grey Bruce Health Unit', 'Grey');
+        names.set('York Regional Health Unit', 'York');
+        names.set('Durham Regional Health Unit', 'Durham');
+        names.set('Huron County Health Unit', 'Huron');
+        names.set('Wellington-Dufferin-Guelph Health Unit', 'Wellington');
+        names.set('Peel Regional Health Unit', 'Peel');
+        names.set('City of Toronto Health Unit', 'Toronto');
+        names.set('Perth District Health Unit', 'Perth');
+        names.set('Waterloo Health Unit', 'Waterloo');
+        names.set('Halton Regional Health Unit', 'Halton');
+        names.set('Lambton Health Unit', 'Lambton');
+        names.set('Middlesex-London Health Unit', 'Middlesex');
+        names.set('Oxford County Health Unit', 'Oxford');
+        names.set('Brant County Health Unit', 'Brant');
+        names.set('City of Hamilton Health Unit', 'Hamilton');
+        names.set('Niagara Regional Area Health Unit', 'Niagara');
+        names.set('Chatham-Kent Health Unit', 'Chatham');
+        names.set('Elgin-St. Thomas Health Unit', 'Oxford');
+        names.set('Haldimand-Norfolk Health Unit', 'Haldimand');
+        names.set('Windsor-Essex County Health Unit', 'Windsor');
+    }
+    buildNamesMap();
+
+    var websites = new Map();
+    function buildWebsitesMap(){
+        websites.set('Northwestern Health Unit', 'https://www.nwhu.on.ca/Pages/coronavirus.aspx');
+        websites.set('Thunder Bay District Health Unit', 'https://www.tbdhu.com/coronavirus');
+        websites.set('Porcupine Health Unit', 'http://www.porcupinehu.on.ca/en/your-health/infectious-diseases/novel-coronavirus/');
+        websites.set('The District of Algoma Health Unit', 'http://www.algomapublichealth.com/disease-and-illness/infectious-diseases/novel-coronavirus/#algoma');
+        websites.set('Sudbury and District Health Unit', 'https://www.phsd.ca/health-topics-programs/diseases-infections/coronavirus/current-status-covid-19');
+        websites.set('Timiskaming Health Unit', 'http://www.timiskaminghu.com/90484/COVID-19#Current%20Situation');
+        websites.set('North Bay Parry Sound District Health Unit', 'https://www.myhealthunit.ca/en/health-topics/coronavirus.asp');
+        websites.set('Renfrew County and District Health Unit', 'https://www.rcdhu.com/novel-coronavirus-covid-19-2/');
+        websites.set('City of Ottawa Health Unit', 'https://www.ottawapublichealth.ca/en/reports-research-and-statistics/la-maladie-coronavirus-covid-19.aspx#Data-Table-for-Figure-2');
+        websites.set('The Eastern Ontario Health Unit', 'https://eohu.ca/en/my-health/covid-19-status-update-for-eohu-region');
+        websites.set('Simcoe Muskoka District Health Unit', 'http://www.simcoemuskokahealthstats.org/topics/infectious-diseases/a-h/covid-19#Confirmed');
+        websites.set('Haliburton, Kawartha, Pine Ridge District Health Unit', 'https://www.hkpr.on.ca/covid-19-2/covid-19/');
+        websites.set('Peterborough County - City Health Unit', 'https://www.peterboroughpublichealth.ca/your-health/diseases-infections-immunization/diseases-and-infections/novel-coronavirus-2019-ncov/local-covid-19-status/');
+        websites.set('Hastings and Prince Edward Counties Health Unit', 'https://hpepublichealth.ca/the-novel-coronavirus-2019ncov/');
+        websites.set('Kingston, Frontenac and Lennox and Addington Health Unit', 'https://www.kflaph.ca/en/healthy-living/novel-coronavirus.aspx');
+        websites.set('Leeds, Grenville and Lanark District Health Unit', 'https://healthunit.org/coronavirus/');
+        websites.set('Grey Bruce Health Unit', 'https://www.publichealthgreybruce.on.ca/COVID-19');
+        websites.set('York Regional Health Unit', 'https://www.york.ca/wps/portal/yorkhome/health/yr/infectiousdiseasesandprevention/covid19/covid19/!ut/p/z1/jZDfT4MwEMf_Fh94lB6Mjc63ijrKtmBi3LAvpoMOMKwlLYPEv95Ol5glit7D5e7yuR_fQwxliEne1yXvaiV5Y_MXNnulZEHjeAlJGuAICKQk8UMM93MPbT8B-MUIIPaf_hGAjY9P_lpgFfh6Ha1LxFreVde13CuUWS9yq_FoitoIboThsmi16IU8KUdZrvq68ObfwRaxy1WLJxwA3SQh2XgpBHRyBnw_mMVeBAnEKQb6ED5O73DswdI_A-Nqykbtvh5P5G6C7dla7IUW2j1qW666rjU3DjgwDINbKlU2ws3VwYGfWiplOpRdkqg9PGfvq9s5fZs2_YpcfQDml0gV/dz/d5/L2dBISEvZ0FBIS9nQSEh/#.Xnqe_ZP0lQI');
+        websites.set('Durham Regional Health Unit', 'https://www.durham.ca/en/health-and-wellness/novel-coronavirus-update.aspx#Status-of-cases-in-Durham-Region');
+        websites.set('Huron County Health Unit', 'https://www.hpph.ca/en/news/coronavirus-covid19-update.aspx#COVID-19-in-Huron-and-Perth');
+        websites.set('Wellington-Dufferin-Guelph Health Unit', 'https://www.wdgpublichealth.ca/your-health/covid-19-information-public');
+        websites.set('Peel Regional Health Unit', 'https://peelregion.ca/coronavirus/#cases');
+        websites.set('City of Toronto Health Unit', 'https://www.toronto.ca/home/covid-19/');
+        websites.set('Perth District Health Unit', 'https://www.hpph.ca/en/news/coronavirus-covid19-update.aspx#COVID-19-in-Huron-and-Perth');
+        websites.set('Waterloo Health Unit', 'https://www.regionofwaterloo.ca/en/health-and-wellness/positive-cases-in-waterloo-region.aspx');
+        websites.set('Halton Regional Health Unit', 'https://www.halton.ca/For-Residents/Immunizations-Preventable-Disease/Diseases-Infections/New-Coronavirus');
+        websites.set('Lambton Health Unit', 'https://lambtonpublichealth.ca/2019-novel-coronavirus/');
+        websites.set('Middlesex-London Health Unit', 'https://www.healthunit.com/novel-coronavirus#local-case-count');
+        websites.set('Oxford County Health Unit', 'https://www.swpublichealth.ca/partners-and-professionals-update-novel-coronavirus-covid-19');
+        websites.set('Brant County Health Unit', 'https://www.bchu.org/ServicesWeProvide/InfectiousDiseases/Pages/coronavirus.aspx');
+        websites.set('City of Hamilton Health Unit', 'https://www.hamilton.ca/public-health/covid-19/novel-coronavirus-covid-19');
+        websites.set('Niagara Regional Area Health Unit', 'https://www.niagararegion.ca/health/covid-19/default.aspx?topic=1');
+        websites.set('Chatham-Kent Health Unit', 'https://ckphu.com/current-situation-in-chatham-kent-and-surrounding-areas/');
+        websites.set('Elgin-St. Thomas Health Unit', 'https://www.swpublichealth.ca/partners-and-professionals-update-novel-coronavirus-covid-19');
+        websites.set('Haldimand-Norfolk Health Unit', 'https://hnhu.org/health-topic/coronavirus-covid-19/');
+        websites.set('Windsor-Essex County Health Unit', 'https://www.wechu.org/cv/local-updates');
+    }
+    buildWebsitesMap();
+    var popup = new mapboxgl.Popup({
+        closeButton: true,
+        closeOnClick: true
+    });
     map.on('click', 'border', function(mouse) {
         var eng_name = mouse.features[0].properties.ENG_LABEL;
-    	new mapboxgl.Popup()
+    	popup
     		.setLngLat(mouse.lngLat)
     		.setHTML(
     			"<p>&nbsp;</p>" +
 				"<h2 style=\"text-align: center;\"><strong>&nbsp;</strong><strong>Health Unit<br/>Circonscription Sanitaire</span></span></strong></h2>" +
 				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">" + eng_name + "</span></span></strong></p>" +
 				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">" + mouse.features[0].properties.FRE_LABEL + "</span></span></strong></p>" +
-				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">Phone/T&eacute;l&eacute;phone:</span></span></strong></p>"
+				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\"> <a href=" + websites.get(eng_name) + " target=\"_blank\"> Health Unit Website </a></span></span></strong></p>" +
+    			"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">Number of Cases to Date: " + data[names.get(eng_name)][daysToAdd] + "</span></span></strong></p>"
+                )
+    		.addTo(map);
+    });
+    
+    map.on('mouseenter', 'assessment', function(e){
+        map.getCanvas().style.cursor = 'pointer';
+        popup
+            .setLngLat(e.features[0].geometry.coordinates.slice())
+            .setHTML(
+                "<p>&nbsp;</p>" +
+				"<h2 style=\"text-align: center;\"><strong>&nbsp;</strong><strong>Assessment Centre<br/>Centres D'évaluation</span></span></strong></h2>" +
+				"<p style=\"text-align: center; text-overflow: ellipsis;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">" + e.features[0].properties.name + "</span></span></strong></p>" +
+				"<p style=\"text-align: center; text-overflow: ellipsis;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title= \"\"><a href=" + e.features[0].properties.info + " target=\"_blank\"> Assessment Centre Website </a></span></span></strong></p>" +
+				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">Phone/T&eacute;l&eacute;phone:" + e.features[0].properties.phone + "</span></span></strong></p>"
     			)
     		.addTo(map);
     });
+    map.on('mouseleave', 'assessment', function(e) {
+        map.getCanvas().style.cursor = '';
+    });
+    
     var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     var initialDate = new Date(2020, 0, 24);
     var date = new Date(2020, 0, 24);
@@ -153,10 +260,6 @@
     var numOfDates=Math.floor((currentDate.getTime()-initialDate.getTime())/86400000)-1;
     var sliderInput = document.getElementById("slider");
     var daysToAdd=0;
-    sliderInput.setAttribute("max", ""+numOfDates);
-
-    var maxCases = 30;
-    document.getElementById('maxCases').innerHTML=""+maxCases;//replace numOfDates with an actual value, i.e. the max cases at a location
     
     updateDateLabel();
     
@@ -327,7 +430,7 @@
         }
         else if (cases>0)
         {
-            return 'lightyellow';
+            return 'khaki';
         }
         else
         {
