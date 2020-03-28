@@ -43,7 +43,7 @@
         </tr>
     </table>
     <div id="pending">
-        <p> Total Number of Pending Cases as of January 24, 2020: 0 </p>
+        <p> Total Number of Pending Cases: </p>
     </div>
 </div>
 
@@ -77,7 +77,13 @@
         measurementId: "G-3T827RGVJW"
     };
     firebase.initializeApp(firebaseConfig);
+    var currentDate = new Date();
     var data = {};
+    var totals;
+    function thisMakesMeAngry() {
+        return currentDate.getMonth() < 10 ? '0' + (currentDate.getMonth() + 1) : (currentDate.get(Month) + 1);
+    };
+    var today = currentDate.getFullYear() + '' + thisMakesMeAngry() + '' + currentDate.getDate();
     var maxCases=-1;
     var query = firebase.database().ref("data");
     query.once("value").then(function(snapshot){
@@ -87,10 +93,20 @@
         maxCases = data['Toronto'][numOfDates];
         sliderInput.setAttribute("max", ""+numOfDates);
         document.getElementById('maxCases').innerHTML=""+maxCases;//replace numOfDates with an actual value, i.e. the max cases at a location
-        document.getElementById('pending').innerHTML="Total Number of <strong>Pending</strong> Cases as of <strong>" + months[databaseDate.getMonth()] + ' ' + databaseDate.getDate() + ', ' + databaseDate.getFullYear() + ": " + data['pending'][numOfDates]+"</strong>";
+        document.getElementById('pending').innerHTML="Total Number of Pending Cases: "+data['pending'][numOfDates];//fill pending here
+    });
+    var queryTwo = firebase.database().ref("Totals");
+    queryTwo.once("value").then(function(snapshot){
+        snapshot.forEach(function(childSnapshot){
+            if(childSnapshot.key == today){
+                totals = childSnapshot.val();
+                document.getElementById('negative').innerHTML = "Negative - " + totals['Negative'];
+                document.getElementById('confirmed').innerHTML = "Confirmed - " + totals['Confirmed positive'];
+                document.getElementById('deceased').innerHTML = "Deceased - " + totals['Deceased'];
+            }
+        });
     });
     
-
     bounds = [
         [-99, 39], //Southwest coordinates
         [-71, 59] //Northeast coordinates
@@ -252,7 +268,7 @@
 				"<h2 style=\"text-align: center;\"><strong>&nbsp;</strong><strong>Assessment Centre<br/>Centres D'évaluation</span></span></strong></h2>" +
 				"<p style=\"text-align: center; text-overflow: ellipsis;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">" + e.features[0].properties.name + "</span></span></strong></p>" +
 				"<p style=\"text-align: center; text-overflow: ellipsis;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title= \"\"><a href=" + e.features[0].properties.info + " target=\"_blank\"> Assessment Centre Website </a></span></span></strong></p>" +
-				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">Phone/T&eacute;l&eacute;phone:" + e.features[0].properties.phone + "</span></span></strong></p>"
+				"<p style=\"text-align: center;\"><strong><span class=\"tlid-translation translation\" lang=\"fr\"><span class=\"\" title=\"\">Phone/T&eacute;l&eacute;phone: " + e.features[0].properties.phone + "</span></span></strong></p>"
     			)
     		.addTo(map);
     });
@@ -263,9 +279,6 @@
     var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     var initialDate = new Date(2020, 0, 24);
     var date = new Date(2020, 0, 24);
-    var currentDate = new Date();
-    var databaseDate = new Date();
-    databaseDate.setDate(currentDate.getDate()-1);
     var numOfDates=Math.floor((currentDate.getTime()-initialDate.getTime())/86400000)-1;
     var sliderInput = document.getElementById("slider");
     var daysToAdd=0;
