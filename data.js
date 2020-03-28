@@ -1,70 +1,3 @@
-<!DOCTYPE html>
-<html>
-
-<head>
-    <title>Ontario COVID-19 Cases Over Time</title>
-    <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
-    <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
-    <link href="style.css" rel="stylesheet" >
-    <meta name="viewport" content="width=device-width,initial-scale=1">   
-    <meta name="author" content="Daniel Pang"/>
-    <meta name="author" content="Ken West"/>
-</head>
-
-<body>
-
-<div id='map'></div>
-
-<div class="map-overlay top">
-    <div class="map-overlay-inner">
-        <label><h2 id="date"></h2><input type="range" min="0" max="1" class="slider" step="1", value="0" id="slider"></label>
-    </div>
-    <div class="map-overlay-inner">
-        <div id="legend" class="legend">
-            <div class="bar"></div>
-            <p style="text-align:left;">
-                0
-                <span style="float:right;" id="maxCases">
-                    -1<!-- dummy max value, should always be replaced by something in the script -->
-                </span>
-            </p>
-            <div style="text-align: center">Total Number of Confirmed COVID-19 Cases to Date at Each Location</div>
-        </div>
-    </div>
-</div>
-
-<div class="table">
-    <table>
-        <tr>
-            <th> In Ontario: </th>
-            <th id="negative"style="color:green; font:Arial" width="150px" align="left"> Negative - </th>
-            <th id="confirmed" style="color:#ff8c00; font:Arial" width="150px" align="left"> Confirmed - </th>
-            <th id="deceased" style="color:red; font:Arial" width="150px" align="left"> Deceased - </th>
-        </tr>
-    </table>
-    <div id="pending">
-        <p> Total Number of Pending Cases: </p>
-    </div>
-</div>
-
-<span style="font-size:30px;cursor:pointer;position:fixed;right:10px;padding:5px;color:white;text-shadow: 2px 2px #000000" onclick="openNav()">&#9776;</span>
-<div id="mySidenav" class="sidenav">
-  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
-  <a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019" target="_blank" id="image"> <img src="https://pbs.twimg.com/media/EPjfjiuW4AAvqeh.jpg:large" alt="WHO Coronavirus Inforgraphic" style="max-width:100%;"></img></a>
-  <a href="https://www.ontario.ca/page/2019-novel-coronavirus" target="_blank">Ontario Information on Coronavirus</a>
-  <a href="https://www.ontario.ca/page/community-health-centres" target="_blank">Ontario Community Health Centres</a>
-  <a href="https://covid-19.ontario.ca/self-assessment/#q0" target="_blank"> Self-Assessment</a>
-  <a href="index.html" target="_blank"> The Map </a>
-  <style>.bmc-button img{height: 34px !important;width: 35px !important;margin-bottom: 1px !important;box-shadow: none !important;border: none !important;vertical-align: middle !important;}.bmc-button{padding: 7px 10px 7px 10px !important;line-height: 35px !important;height:51px !important;min-width:217px !important;text-decoration: none !important;display:inline-flex !important;color:#FFFFFF !important;background-color:#FF813F !important;border-radius: 5px !important;border: 1px solid transparent !important;padding: 7px 10px 7px 10px !important;font-size: 22px !important;letter-spacing: 0.6px !important;box-shadow: 0px 1px 2px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;margin: 0 auto !important;font-family:'Cookie', cursive !important;-webkit-box-sizing: border-box !important;box-sizing: border-box !important;-o-transition: 0.3s all linear !important;-webkit-transition: 0.3s all linear !important;-moz-transition: 0.3s all linear !important;-ms-transition: 0.3s all linear !important;transition: 0.3s all linear !important;}.bmc-button:hover, .bmc-button:active, .bmc-button:focus {-webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;text-decoration: none !important;box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;opacity: 0.85 !important;color:#FFFFFF !important;}</style><link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet"><a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/69coqmO"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-app.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-analytics.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-auth.js"></script>
-<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-database.js"></script>
-
-
-<script>
 
     var firebaseConfig = {
         apiKey: "AIzaSyBmznggzZWJ-fn4mQqrN0OgGqbxmAcLOF0",
@@ -93,7 +26,7 @@
         maxCases = data['Toronto'][numOfDates];
         sliderInput.setAttribute("max", ""+numOfDates);
         document.getElementById('maxCases').innerHTML=""+maxCases;//replace numOfDates with an actual value, i.e. the max cases at a location
-        //document.getElementById('pending').innerHTML="Total Number of <strong>Pending</strong> Cases as of <strong>" + months[databaseDate.getMonth()] + ' ' + databaseDate.getDate() + ', ' + databaseDate.getFullYear() + ": " + data['pending'][numOfDates]+"</strong>";
+        document.getElementById('pending').innerHTML="Total Number of Pending Cases: "+data['pending'][numOfDates];//fill pending here
     });
     var queryTwo = firebase.database().ref("Totals");
     queryTwo.once("value").then(function(snapshot){
@@ -106,7 +39,7 @@
             }
         });
     });
-    
+
     bounds = [
         [-99, 39], //Southwest coordinates
         [-71, 59] //Northeast coordinates
@@ -137,7 +70,7 @@
                 'fill-outline-color': "#ffffff"
                 }
         });
-        
+
         map.addSource('Assessment', {
             type: 'vector',
             url: 'mapbox://zenith404.ck837zzkb1nak2kmetcjm0osj-7b4iz'
@@ -154,7 +87,7 @@
         });
         updateMap();
     });
-    
+
 
     var names = new Map();
     function buildNamesMap(){
@@ -258,7 +191,7 @@
                 )
     		.addTo(map);
     });
-    
+
     map.on('mouseenter', 'assessment', function(e){
         map.getCanvas().style.cursor = 'pointer';
         popup
@@ -275,21 +208,21 @@
     map.on('mouseleave', 'assessment', function(e) {
         map.getCanvas().style.cursor = '';
     });
-    
+
     var months = ['January','February','March','April','May','June','July','August','September','October','November','December'];
     var initialDate = new Date(2020, 0, 24);
     var date = new Date(2020, 0, 24);
     var numOfDates=Math.floor((currentDate.getTime()-initialDate.getTime())/86400000)-1;
     var sliderInput = document.getElementById("slider");
     var daysToAdd=0;
-    
+
     updateDateLabel();
-    
+
     function updateDateLabel(){
         var formattedDate = months[date.getMonth()] + ' ' + date.getDate() + ', ' + date.getFullYear();
         document.getElementById('date').innerHTML='Date: '+formattedDate;
     }
-    
+
    //The big slider event listener, need this to update the map as well, current date is updated here as well
     document.getElementById('slider').addEventListener('input', function(e) {
         daysToAdd = parseInt(e.target.value, 10);//aka the index for each of the corresponding location arrays
@@ -300,128 +233,128 @@
     });
     //there should be 34 health units
     //VVV important, Southwestern = Elgin + Oxford, they merged in 2018 and it hasn't been reflected in the boundaries
-    //instead of calculating the RgB every time, calculate colours and put it into a 2-d array when a day is requested, 
+    //instead of calculating the RgB every time, calculate colours and put it into a 2-d array when a day is requested,
     //mark down which days have been requested and have an if statement to check if there's colours in the 2-d array already, if not, calculate and store it
     function updateMap(){
         map.setPaintProperty(
-        'border', 
-        'fill-color', 
-            ['match', 
+        'border',
+        'fill-color',
+            ['match',
             ['get', 'ENG_LABEL'],
-            
+
             'Northwestern Health Unit',
             pickColour(data['Northwestern'][daysToAdd]),
-            
+
             'Thunder Bay District Health Unit',
             pickColour(data['Thunder'][daysToAdd]),
-            
+
             'Porcupine Health Unit',
             pickColour(data['Porcupine'][daysToAdd]),
-            
+
             'The District of Algoma Health Unit',
             pickColour(data['Algoma'][daysToAdd]),
-            
+
             'Sudbury and District Health Unit',
             pickColour(data['Sudbury'][daysToAdd]),
-            
+
             'Timiskaming Health Unit',
             pickColour(data['Timiskaming'][daysToAdd]),
-            
+
             'North Bay Parry Sound District Health Unit',
             pickColour(data['North'][daysToAdd]),
-            
+
             'Renfrew County and District Health Unit',
             pickColour(data['Renfrew'][daysToAdd]),
-            
+
             'City of Ottawa Health Unit',
             pickColour(data['Ottawa'][daysToAdd]),
-            
+
             'The Eastern Ontario Health Unit',
             pickColour(data['Eastern'][daysToAdd]),
-            
+
             'Simcoe Muskoka District Health Unit',
             pickColour(data['Simcoe'][daysToAdd]),
-            
+
             'Haliburton, Kawartha, Pine Ridge District Health Unit',
             pickColour(data['Haliburton'][daysToAdd]),
-            
+
             'Peterborough County - City Health Unit',
             pickColour(data['Peterborough'][daysToAdd]),
-            
+
             'Hastings and Prince Edward Counties Health Unit',
             pickColour(data['Hastings'][daysToAdd]),
-            
+
             'Kingston, Frontenac and Lennox and Addington Health Unit',
             pickColour(data['Kingston'][daysToAdd]),
-            
+
             'Leeds, Grenville and Lanark District Health Unit',
             pickColour(data['Leeds'][daysToAdd]),
-            
+
             'Grey Bruce Health Unit',
             pickColour(data['Grey'][daysToAdd]),
-            
+
             'York Regional Health Unit',
             pickColour(data['York'][daysToAdd]),
-            
+
             'Durham Regional Health Unit',
             pickColour(data['Durham'][daysToAdd]),
-            
+
             'Huron County Health Unit',
             pickColour(data['Huron'][daysToAdd]),
-            
+
             'Wellington-Dufferin-Guelph Health Unit',
             pickColour(data['Wellington'][daysToAdd]),
-            
+
             'Peel Regional Health Unit',
             pickColour(data['Peel'][daysToAdd]),
-            
+
             'City of Toronto Health Unit',
             pickColour(data['Toronto'][daysToAdd]),
-            
+
             'Perth District Health Unit',
             pickColour(data['Perth'][daysToAdd]),
-            
+
             'Waterloo Health Unit',
             pickColour(data['Waterloo'][daysToAdd]),
-            
+
             'Halton Regional Health Unit',
             pickColour(data['Halton'][daysToAdd]),
-            
+
             'Lambton Health Unit',
             pickColour(data['Lambton'][daysToAdd]),
-            
+
             'Middlesex-London Health Unit',
             pickColour(data['Middlesex'][daysToAdd]),
-            
+
             'Oxford County Health Unit',
             pickColour(data['Southwestern'][daysToAdd]),
-            
+
             'Brant County Health Unit',
             pickColour(data['Brant'][daysToAdd]),
-            
+
             'City of Hamilton Health Unit',
             pickColour(data['Hamilton'][daysToAdd]),
-            
+
             'Niagara Regional Area Health Unit',
             pickColour(data['Niagara'][daysToAdd]),
-            
+
             'Chatham-Kent Health Unit',
             pickColour(data['Chatham'][daysToAdd]),
-            
+
             'Elgin-St. Thomas Health Unit',
             pickColour(data['Southwestern'][daysToAdd]),
-            
+
             'Haldimand-Norfolk Health Unit',
             pickColour(data['Haldimand'][daysToAdd]),
-            
+
             'Windsor-Essex County Health Unit',
             pickColour(data['Windsor'][daysToAdd]),
-            
+
             "rgb(0, 0, 0)"]
         );// can't have match or case or anything without a fallback value, so you can't do a for loop through all locations cuz otherwise, only the last one is applied and the rest gets the fallback value
     }
     //so the ideal is that the database returns UID -> [Cases], this way locations and colours can be arrays and thus put into the match where index = UID
-    //otherwise there's a lot of garbage code writing to do where you'd have to match every single individual health unit by name to it's colour 
+    //otherwise there's a lot of garbage code writing to do where you'd have to match every single individual health unit by name to it's colour
 
     //not in use anymore
     function pickRGB(cases){
@@ -432,7 +365,7 @@
         var rgb = 'rgb('+Math.round(colour1[0]*w1+colour2[0]*w2)+','+Math.round(colour1[1]*w1+colour2[1]*w2)+','+Math.round(colour1[2]*w1+colour2[2]*w2)+')';
         return rgb;
     }
-    
+
     function pickColour(cases){
         if(cases>maxCases*5/6)
         {
@@ -463,7 +396,7 @@
             return 'white';
         }
     }
-    
+
     function openNav() {
         document.getElementById("mySidenav").style.width = "25%";
     }
@@ -471,16 +404,3 @@
     function closeNav() {
         document.getElementById("mySidenav").style.width = "0";
     }
-    
-    
-</script>
-</body>
-
-
-
-
-
-
-
-
-</html>
