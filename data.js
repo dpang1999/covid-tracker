@@ -44,10 +44,10 @@
         [-99, 39], //Southwest coordinates
         [-71, 59] //Northeast coordinates
     ]
-    mapboxgl.accessToken = 'pk.eyJ1IjoiZHpjcCIsImEiOiJjazd3cDIwazYwNHd4M2RxdTQ1aWxwamF1In0.433QxPSQ-xAWDWFvD9b7lQ';
+    mapboxgl.accessToken = '';
     var map = new mapboxgl.Map({
         container: 'map',
-        style: 'mapbox://styles/dzcp/ck7xniymu1kvk1iqdiui4c151',
+        style: '',
         center: [-79.38, 43.65],
         zoom:5,
         attributionControl: false,
@@ -57,7 +57,7 @@
     {
         map.addSource('Borders', {
             type: 'vector',
-            url: 'mapbox://dzcp.ascrkivb'
+            url: ''
         });
         map.addLayer(
         {
@@ -73,7 +73,7 @@
 
         map.addSource('Assessment', {
             type: 'vector',
-            url: 'mapbox://zenith404.ck837zzkb1nak2kmetcjm0osj-7b4iz'
+            url: ''
         });
         map.addLayer(
         {
