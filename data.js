@@ -1,13 +1,13 @@
 
     var firebaseConfig = {
-        apiKey: "AIzaSyBmznggzZWJ-fn4mQqrN0OgGqbxmAcLOF0",
-        authDomain: "covidtracker-4da2a.firebaseapp.com",
-        databaseURL: "https://covidtracker-4da2a.firebaseio.com",
-        projectId: "covidtracker-4da2a",
-        storageBucket: "covidtracker-4da2a.appspot.com",
-        messagingSenderId: "820832515003",
-        appId: "1:820832515003:web:60c2cd370fb99c2235ca9e",
-        measurementId: "G-3T827RGVJW"
+        apiKey: "",
+        authDomain: "",
+        databaseURL: "",
+        projectId: "",
+        storageBucket: "",
+        messagingSenderId: "",
+        appId: "",
+        measurementId: ""
     };
     firebase.initializeApp(firebaseConfig);
     var currentDate = new Date();
