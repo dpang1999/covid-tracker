@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <title>Ontario COVID-19 Cases Over Time</title>
+    <script src='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.js'></script>
+    <link href='https://api.mapbox.com/mapbox-gl-js/v1.8.1/mapbox-gl.css' rel='stylesheet' />
+    <link href="style.css" rel="stylesheet" >
+    <meta name="viewport" content="width=device-width,initial-scale=1">   
+    <meta name="author" content="Daniel Pang"/>
+    <meta name="author" content="Ken West"/>
+</head>
+
+<body>
+
+<div id='map'></div>
+
+<div class="map-overlay top">
+    <div class="map-overlay-inner">
+        <label><h2 id="date"></h2><input type="range" min="0" max="1" class="slider" step="1", value="0" id="slider"></label>
+    </div>
+    <div class="map-overlay-inner">
+        <div id="legend" class="legend">
+            <div class="bar"></div>
+            <p style="text-align:left;">
+                0
+                <span style="float:right;" id="maxCases">
+                    -1<!-- dummy max value, should always be replaced by something in the script -->
+                </span>
+            </p>
+            <div style="text-align: center">Total Number of Confirmed COVID-19 Cases to Date at Each Location</div>
+        </div>
+    </div>
+</div>
+
+<div class="table">
+    <table>
+        <tr>
+            <th> In Ontario: </th>
+            <th id="negative"style="color:green; font:Arial" width="150px" align="left"> Negative - </th>
+            <th id="confirmed" style="color:#ff8c00; font:Arial" width="150px" align="left"> Confirmed - </th>
+            <th id="deceased" style="color:red; font:Arial" width="150px" align="left"> Deceased - </th>
+        </tr>
+    </table>
+    <div id="pending">
+        <p> Total Number of Pending Cases: </p>
+    </div>
+</div>
+
+<span style="font-size:30px;cursor:pointer;position:fixed;right:10px;padding:5px;color:white;text-shadow: 2px 2px #000000" onclick="openNav()">&#9776;</span>
+<div id="mySidenav" class="sidenav">
+  <a href="javascript:void(0)" class="closebtn" onclick="closeNav()">&times;</a>
+  <a href="https://www.who.int/emergencies/diseases/novel-coronavirus-2019" target="_blank" id="image"> <img src="https://pbs.twimg.com/media/EPjfjiuW4AAvqeh.jpg:large" alt="WHO Coronavirus Inforgraphic" style="max-width:100%;"></img></a>
+  <a href="https://www.ontario.ca/page/2019-novel-coronavirus" target="_blank">Ontario Information on Coronavirus</a>
+  <a href="https://www.ontario.ca/page/community-health-centres" target="_blank">Ontario Community Health Centres</a>
+  <a href="https://covid-19.ontario.ca/self-assessment/#q0" target="_blank"> Self-Assessment</a>
+  <a href="faq.html" target="_blank"> FAQ </a>
+  <style>.bmc-button img{height: 34px !important;width: 35px !important;margin-bottom: 1px !important;box-shadow: none !important;border: none !important;vertical-align: middle !important;}.bmc-button{padding: 7px 10px 7px 10px !important;line-height: 35px !important;height:51px !important;min-width:217px !important;text-decoration: none !important;display:inline-flex !important;color:#FFFFFF !important;background-color:#FF813F !important;border-radius: 5px !important;border: 1px solid transparent !important;padding: 7px 10px 7px 10px !important;font-size: 22px !important;letter-spacing: 0.6px !important;box-shadow: 0px 1px 2px rgba(190, 190, 190, 0.5) !important;-webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;margin: 0 auto !important;font-family:'Cookie', cursive !important;-webkit-box-sizing: border-box !important;box-sizing: border-box !important;-o-transition: 0.3s all linear !important;-webkit-transition: 0.3s all linear !important;-moz-transition: 0.3s all linear !important;-ms-transition: 0.3s all linear !important;transition: 0.3s all linear !important;}.bmc-button:hover, .bmc-button:active, .bmc-button:focus {-webkit-box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;text-decoration: none !important;box-shadow: 0px 1px 2px 2px rgba(190, 190, 190, 0.5) !important;opacity: 0.85 !important;color:#FFFFFF !important;}</style><link href="https://fonts.googleapis.com/css?family=Cookie" rel="stylesheet"><a class="bmc-button" target="_blank" href="https://www.buymeacoffee.com/69coqmO"><img src="https://cdn.buymeacoffee.com/buttons/bmc-new-btn-logo.svg" alt="Buy me a coffee"><span style="margin-left:15px;font-size:28px !important;">Buy me a coffee</span></a>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-app.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-analytics.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-auth.js"></script>
+<script src="https://www.gstatic.com/firebasejs/7.12.0/firebase-database.js"></script>
+<script src="./data.js"></script>
+
+</body>
+
+
+
+
+
+
+
+
+</html>
